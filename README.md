@@ -1,48 +1,35 @@
 # CorporationX
 
-Репозиторий для всего проекта. Использует git submodule, чтобы включить все остальные сервисы
+Это проект над которым я работал вместе со своей командой из 8 человек. Писали проект на микросервисной архитектуре. Фичи реализованные мной будут указаны ниже.
 
-# Как начать работу?
+# Мои фичи
 
-`git clone --recurse-submodules https://github.com/CorporationX/CorporationX`
+Фича News Feed реализованная на event-driven подходе с low-latency, scalability и reliability, кешированием (Redis) и брокером сообщений Kafka
+https://github.com/AntonRudnikovskiy/post_service/blob/medusa-master-Anton/src/main/java/faang/school/postservice/service/FeedService.java
 
-# Как поднять БД и другие инструменты локально?
+Реализовал отдельный микросервис URL shortener для реферальной системы используя кэширование с помощью (Redis)
+https://github.com/AntonRudnikovskiy/url_shortener_service/tree/medusa-master-Anton
 
-Следуем инструкциям в README в разделе `infra`. Это отдельный репозиторий, который содержит в себе все инфраструктурные компоненты (БД, Redis, Docker Compose и пр.)
+Реализовал аналитику комментариев в отдельном микросервисе с брокером сообщений (Redis)
+https://github.com/AntonRudnikovskiy/analytics_service/blob/medusa-master/src/main/java/faang/school/analytics/messaging/CommentEventListener.java
 
-# Как вести разработку?
+Разработал систему достижений  на event-driven архитектуре с брокером сообщений (Redis)
+https://github.com/AntonRudnikovskiy/achievement_service/blob/medusa-master/src/main/java/faang/school/achievement/messaging/mentorship/MentorshipEventListener.java
 
-Каждая папка в этом репозитории - это отдельный подрепозиторий, который тоже есть на GitHub. Т.е. user_service - это обычный Git-репозиторий, который попросту включен в большой репозиторий CorporationX в качестве подрепозитория. 
+Разработал уведомление запроса на менторство в отдельном микросервисе с брокером сообщений (Redis)
+https://github.com/AntonRudnikovskiy/notification_service/blob/medusa-master/src/main/java/faang/school/notificationservice/messaging/MentorshipOfferedEventListener.java
 
-CorporationX репозиторий существует лишь для удобства: можно сразу склонировать все необходимые сервисы всего одной командой `git clone`, которая указана выше.
+Интегрировал Google Calendar в приложение, что позволило пользователям создавать и организовывать свои события
+https://github.com/AntonRudnikovskiy/user_service/blob/medusa-master/src/main/java/school/faang/user_service/service/event/google/CalendarService.java
 
-Каждый подрепозиторий представляет собой отдельный сервис (Java-приложение) в экосистеме CorporationX. Например, user_service - это приложение, которое содержит в себе логику работы с пользователями, project_service - логику работы с проектами и т.д. 
-Соответственно в зависимости от конкретной задачи вы будете работать либо в том, либо в другом сервисе. По сути просто писать там код, как в обычном проекте в IDEA.
+Реализовал отправку SMS-сообщений через Vonage API обеспечив пользователям надежную доставку уведомлений
+https://github.com/AntonRudnikovskiy/notification_service/blob/medusa-master/src/main/java/faang/school/notificationservice/notification/SmsService.java
 
-Поэтому:
-1. Выкачиваем весь проект CorporationX, используя команду клонирования выше
-2. Из конкретной задачи в Jira определяем, в каком сервисе нужно вести разработку.
-3. Открываем в IDEA папку с этим сервисом
-4. Работаемс!
+Интегрировал Amazon S3 для работы с media-файлами в 3+ микросервисах обеспечивая надежное хранение данных
+https://github.com/AntonRudnikovskiy/user_service/blob/medusa-master/src/main/java/school/faang/user_service/config/amazon/AmazonConfig.java
 
-# Как создавать PR?
+Реализовал систему лайков для постов и комментариев, давая пользователям возможность выражать предпочтения
+https://github.com/AntonRudnikovskiy/post_service/blob/medusa-master/src/main/java/faang/school/postservice/service/LikeService.java
 
-Каждая команда будет иметь свою собственную master ветку в общем репозитории. Например, команда unicorn имеет ветку `master-unicorn`, которая содержит весь стабильный код этой команды в определенном сервисе, и именно туда участники должны создавать PR-ы.
-
-Поэтому:
-
-1. Получаем задачу в Jira
-2. Определяем, в каком сервисе будем вести разработку
-3. Открываем этот сервис в IDEA
-4. Переключаемся на `master`-ветку СВОЕЙ команды. ЭТО ОЧЕНЬ ВАЖНО. Если вы только начинаете разработку новой задачи, то убедитесь, что переключились на ветку `master-unicorn` или `master-kraken` в зависимости от вашей команды, перед тем, как создать еще одну ветку.
-5. Из данной ветки создаем ветку для вашей конкретной задачи по шаблону: `feature-{номер_задачи}` или `bugfix-{номер_задачи}` в зависимости от того, делаете ли вы новую фичу или чините некоторый баг.
-6. Именно в этой ветке ведем всю разработку
-7. Когда разработка завершена создаем PR из этой ветки в master-ветку вашей команды, из которой изначально и создавали рабочую ветку. Убедитесь, что всегда создаете PR в правильную ветку именно для вашей команды.
-8. Получам аппрув от техлида.
-9. Мержируемся!
-
-# Тесты
-
-Каждый PR в этом репозитории обязан содержать unit-тесты на всю вашу логику. PR-ы без unit-тестов будут отправлятся сразу обратно в работу без частичной проверки. Когда команда добавит CI пайплайны на GitHub, то PR-ы с упавшими тестами, будут также сразу отправляться обратно в работу без частичной проверки. 
-
-Ваш PR должен быть полностью зеленым и покрыт тестами, чтобы получить ревью. Это обязательное требование.
+Разработал сервис для добавления и удаления аватарок пользователей, давая им контроль над своим профилем
+https://github.com/AntonRudnikovskiy/user_service/blob/medusa-master/src/main/java/school/faang/user_service/service/UserProfilePicService.java
