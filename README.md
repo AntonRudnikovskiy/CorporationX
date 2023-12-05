@@ -5,7 +5,7 @@
 # Мои фичи
 
 Фича News Feed реализованная на event-driven подходе с low-latency, scalability и reliability, кешированием (Redis) и брокером сообщений Kafka
-https://github.com/AntonRudnikovskiy/post_service/blob/medusa-master-Anton/src/main/java/faang/school/postservice/service/FeedService.java
+https://github.com/AntonRudnikovskiy/post_service/blob/medusa-master-Anton/src/main/java/faang/school/postservice/messaging/consumers/PostViewConsumer.java
 
 Реализовал отдельный микросервис URL shortener для реферальной системы используя кэширование с помощью (Redis)
 https://github.com/AntonRudnikovskiy/url_shortener_service/tree/medusa-master-Anton
